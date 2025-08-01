@@ -1,4 +1,4 @@
-module cmt
+module github.com/dakoctba/cmt
 
 go 1.21
 
