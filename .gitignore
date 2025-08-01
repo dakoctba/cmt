@@ -3,6 +3,8 @@
 #
 # Binaries for programs and plugins
 cmt
+cmd/cmt
+build/cmt
 *.exe
 *.exe~
 *.dll
