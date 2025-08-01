@@ -2,6 +2,26 @@
 
 A Go-based tool for generating conventional commit messages using AI models via Ollama.
 
+## Project Structure
+
+This project follows Go community conventions and best practices:
+
+```
+cmt/
+├── cmd/cmt/           # Main application entry point
+├── internal/          # Private application code
+│   ├── commit/        # Commit message generation logic
+│   ├── config/        # Configuration management
+│   ├── git/           # Git operations
+│   ├── ollama/        # Ollama integration
+│   └── spinner/       # Loading spinner utilities
+├── docs/              # Documentation
+├── tests/             # Integration tests
+├── build/             # Build artifacts (generated)
+├── Makefile           # Build configuration
+└── .goreleaser.yml    # Release configuration
+```
+
 ## Features
 
 - Generate conventional commit messages from staged Git changes
@@ -23,7 +43,7 @@ A Go-based tool for generating conventional commit messages using AI models via 
 ```bash
 git clone https://github.com/dakoctba/cmt.git
 cd cmt
-go build -o cmt
+go build -o cmt ./cmd/cmt
 ```
 
 ### Install globally (optional)
@@ -71,6 +91,34 @@ You can edit this file to change the default model.
 - `--help`: Show help message
 - `--version`: Show version information
 
+## Development
+
+### Running tests
+
+```bash
+# Run all tests
+go test ./...
+
+# Run specific test package
+go test ./internal/commit
+go test ./internal/config
+go test ./internal/git
+go test ./internal/spinner
+
+# Run integration tests
+go test ./tests
+```
+
+### Building
+
+```bash
+# Build for current platform
+go build -o cmt ./cmd/cmt
+
+# Build for specific platform
+GOOS=linux GOARCH=amd64 go build -o cmt ./cmd/cmt
+```
+
 ## How it works
 
 1. Checks if Ollama is installed and running
@@ -110,3 +158,5 @@ MIT License - see LICENSE file for details.
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+For detailed documentation, see the [docs/](docs/) directory.
