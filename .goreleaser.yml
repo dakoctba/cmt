@@ -1,0 +1,109 @@
+# .goreleaser.yml
+# Configuration for GoReleaser
+# https://goreleaser.com
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+
+version: 2
+
+project_name: cmt
+
+before:
+  hooks:
+    # You may remove this if you don't use go modules
+    - go mod tidy
+
+builds:
+  -
+    # Main build
+    id: cmt
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X github.com/dakoctba/cmt/cmd.version={{.Version}} -X github.com/dakoctba/cmt/cmd.buildTime={{.Date}} -X github.com/dakoctba/cmt/cmd.gitCommit={{.Commit}}
+    main: ./
+    binary: cmt
+
+archives:
+  -
+    # this name template makes the OS and Arch compatible with the results of `uname`.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+
+    # Archive settings
+    id: cmt
+    files:
+      - LICENSE
+      - README.md
+
+    # Default format is tar.gz
+    formats: [tar.gz]
+
+    # Use zip for macOS and Windows
+    format_overrides:
+      - goos: darwin
+        formats: [zip]
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+release:
+  github:
+    owner: dakoctba
+    name: cmt
+  draft: false  # Publicação automática
+  prerelease: auto
+  name_template: "{{ .ProjectName }} v{{ .Version }}"
+  mode: replace
+  # Configurar para garantir que os binários sejam publicados
+  ids:
+    - cmt
+
+# Explicitly define what to publish
+# Include source code and built binaries
+source:
+  enabled: true
+  name_template: '{{ .ProjectName }}-{{ .Version }}'
+
+# Skip the upload for snapshots
+snapshot:
+  name_template: "{{ incpatch .Version }}-SNAPSHOT-{{.ShortCommit}}"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+
+brews:
+  - name: cmt
+    homepage: "https://github.com/dakoctba/cmt"
+    description: "A Go-based tool for generating conventional commit messages using AI models via Ollama"
+    repository:
+      name: homebrew-tap
+      owner: dakoctba
+    commit_author:
+      name: goreleaser
+      email: goreleaser@users.noreply.github.com
+    test: |
+      system "#{bin}/cmt", "--version"
+    install: |
+      bin.install "cmt"
