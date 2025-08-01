@@ -10,6 +10,12 @@ import (
 )
 
 var (
+	// Build-time variables (injected via ldflags)
+	version   = "dev"
+	buildTime = "unknown"
+	gitCommit = "unknown"
+
+	// Command flags
 	cfgFile string
 	model   string
 )
@@ -21,7 +27,7 @@ func main() {
 		Long: `cmt is a tool that generates conventional commit messages from staged Git changes using AI models.
 
 It analyzes your staged changes and generates a commit message following the Conventional Commits specification.`,
-		Version:       "1.0.0",
+		Version:       version,
 		RunE:          commit.RunCommit,
 		SilenceUsage:  true, // Don't show usage on error
 		SilenceErrors: true, // Don't show error messages automatically

@@ -26,7 +26,7 @@ builds:
       - amd64
       - arm64
     ldflags:
-      - -s -w -X github.com/dakoctba/cmt/cmd.version={{.Version}} -X github.com/dakoctba/cmt/cmd.buildTime={{.Date}} -X github.com/dakoctba/cmt/cmd.gitCommit={{.Commit}}
+      - -s -w -X main.version={{.Version}} -X main.buildTime={{.Date}} -X main.gitCommit={{.Commit}}
     main: ./cmd/cmt
     binary: cmt
 
