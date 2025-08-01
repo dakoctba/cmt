@@ -14,8 +14,7 @@ all: clean build
 .PHONY: build
 build:
 	@echo "Building $(BINARY_NAME)..."
-	@mkdir -p $(BUILD_DIR)
-	go build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/cmt
+	go build $(LDFLAGS) -o $(BINARY_NAME) ./cmd/cmt
 
 # Build for multiple platforms
 .PHONY: build-all
@@ -38,7 +37,7 @@ build-all: clean
 .PHONY: install
 install: build
 	@echo "Installing $(BINARY_NAME)..."
-	sudo cp $(BUILD_DIR)/$(BINARY_NAME) /usr/local/bin/
+	sudo cp $(BINARY_NAME) /usr/local/bin/
 
 # Run tests
 .PHONY: test tests
